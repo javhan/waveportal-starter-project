@@ -1,4 +1,4 @@
-import * as React, { useEffect } from "react";
+import React, { useEffect } from "react";
 // import { ethers } from "ethers";
 import './App.css';
 
