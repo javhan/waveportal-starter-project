@@ -30,13 +30,26 @@ export default function App() {
   }
 }
 
+const connectWallet = async () => {
+  try {
+    const { ethereum } = window;
+    if (!ethereum) {
+      alert("Get MetaMask!");
+      return;
+    }
+
+    const accounts = await ethereum.request({ method: "eth_requestAccounts"});
+
+    console.log("Connected", accounts[0]);
+    setCurrentAccount(accounts);
+  } catch (error) {
+    console.log(error)
+  }
+}
+
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [])
-
-  const wave = () => {
-    console.log("Hello!")
-  }
   
   return (
     <div className="mainContainer">
@@ -50,9 +63,14 @@ export default function App() {
         I am Wen Han and I am learning solidity? Connect your Ethereum wallet and wave at me!
         </div>
 
-        <button className="waveButton" onClick={wave}>
+        <button className="waveButton" onClick={null}>
           Wave at Me
         </button>
+        {!currentAccount && (
+          <button className="waveButton" onClick={connectWallet}>
+            Connect Wallet
+          </button>
+        )}
       </div>
     </div>
   );
