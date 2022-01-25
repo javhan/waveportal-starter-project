@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import * as React, { useEffect } from "react";
 // import { ethers } from "ethers";
 import './App.css';
 
@@ -16,6 +16,10 @@ export default function App() {
   useEffect(() => {
     checkIfWalletIsConnected();
   }, [])
+
+  const wave = () => {
+    console.log("Hello!")
+  }
   
   return (
     <div className="mainContainer">
