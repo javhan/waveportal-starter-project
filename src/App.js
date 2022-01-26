@@ -7,10 +7,39 @@ export default function App() {
 
   const [currentAccount, setCurrentAccount] = useState("")
   const [loading, setLoading] = useState("")
+  const [allWaves, setAllWaves] = useState([])
 
-  const contractAddress = "0x8a850a3A520b4293c40f329afffA060e122E1B3c"
+  const contractAddress = "0x7093A09EA628C9B5108FB54367dA78aE9c54678a"
 
   const contractABI = abi.abi
+
+  const getAllWaves = async () => {
+    try {
+      const { ethereum } = window;
+      if (ethereum) {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+
+        const waves = await wavePortalContract.getAllWaves();
+
+        let wavesCleaned = [];
+        waves.forEach(wave => {
+          wavesCleaned.push({
+            address: wave.waver,
+            timestamp: new Date(wave.timestamp * 1000),
+            message: wave.message
+          });
+        });
+
+        setAllWaves(wavesCleaned);
+      } else {
+        console.log("Ethereum objext doesn't exist!")
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -113,6 +142,15 @@ const wave = async () => {
             Connect Wallet
           </button>
         )}
+
+        {allWaves.map((wave, index) => {
+          return (
+            <div key={index} style = {{ backgroundColor: "OldLace", marginTop:"16px", padding: "8px"}}>
+              <div>Address: {wave.address}</div>
+              <div>Time: {wave.timestamp.toString()}</div>
+              <div>Message: {wave.message}</div>
+            </div>)
+        })}
       </div>
     </div>
   );
