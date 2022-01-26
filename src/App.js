@@ -8,7 +8,6 @@ export default function App() {
   const [currentAccount, setCurrentAccount] = useState("")
   const [loading, setLoading] = useState("")
   const [allWaves, setAllWaves] = useState([])
-  const [text, setText] = useState("")
 
   const contractAddress = "0x7093A09EA628C9B5108FB54367dA78aE9c54678a"
 
@@ -35,7 +34,7 @@ export default function App() {
 
         setAllWaves(wavesCleaned);
       } else {
-        console.log("Ethereum object doesn't exist!")
+        console.log("Ethereum objext doesn't exist!")
       }
     } catch (error) {
       console.log(error)
@@ -87,7 +86,7 @@ const connectWallet = async () => {
 const wave = async () => {
   try {
     const { ethereum } = window;
-    if (text === "") return;
+
     if (ethereum) {
       const provider = new ethers.providers.Web3Provider(ethereum);
       const signer = provider.getSigner();
@@ -96,7 +95,7 @@ const wave = async () => {
       let count = await wavePortalContract.getTotalWaves();
       console.log("Retrieved total wave count...", count.toNumber());
 
-      const waveTxn = await wavePortalContract.wave(text);
+      const waveTxn = await wavePortalContract.wave("this is a message");
       setLoading("load")
       console.log("Mining...", waveTxn.hash);
 
@@ -129,7 +128,7 @@ const wave = async () => {
         <div className="bio">
         I am Wen Han and I am learning solidity? Connect your Ethereum wallet and wave at me!
         </div>
-        <input type="text" onChange={(e) => setText(e.target.value)}/>
+
         <button className="waveButton" onClick={wave}>
           Wave at Me
         </button>
