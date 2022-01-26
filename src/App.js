@@ -6,6 +6,7 @@ import abi from "./utils/WavePortal.json"
 export default function App() {
 
   const [currentAccount, setCurrentAccount] = useState("")
+  const [loading, setLoading] = useState("")
 
   const contractAddress = "0x8a850a3A520b4293c40f329afffA060e122E1B3c"
 
@@ -65,10 +66,12 @@ const wave = async () => {
       console.log("Retrieved total wave count...", count.toNumber());
 
       const waveTxn = await wavePortalContract.wave();
+      setLoading("load")
       console.log("Mining...", waveTxn.hash);
 
       await waveTxn.wait();
       console.log("Mined -- ", waveTxn.hash)
+      setLoading("done")
 
       count = await wavePortalContract.getTotalWaves();
       console.log("Retrieved total wave count...", count.toNumber())
@@ -99,6 +102,12 @@ const wave = async () => {
         <button className="waveButton" onClick={wave}>
           Wave at Me
         </button>
+        {(loading === "load") && (
+          <h1>Sending Wave</h1>
+        )}
+        {(loading === "done") && (
+          <h1>You waved! Thank you!</h1>
+        )}
         {!currentAccount && (
           <button className="waveButton" onClick={connectWallet}>
             Connect Wallet
